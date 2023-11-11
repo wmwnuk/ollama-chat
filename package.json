@@ -1,7 +1,9 @@
 {
     "scripts": {
         "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
-        "start:client": "npx webpack serve --mode development",
+        "start-dev": "concurrently \"npm run start:client-dev\" \"npm run start:server\"",
+        "start:client-dev": "npx webpack serve --mode development",
+        "start:client": "npx webpack serve --mode production",
         "start:server": "npx ts-node src/server.ts"
     },
     "dependencies": {

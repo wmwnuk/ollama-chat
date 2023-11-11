@@ -1,0 +1,28 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# Top-most EditorConfig file
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# React specific settings
+[**.jsx]
+indent_size = 2
+
+[**.tsx]
+indent_size = 2
+
+# Specify the file type
+[package.json]
+indent_style = space
+indent_size = 2
+
+[tsconfig.json]
+indent_style = space
+indent_size = 2

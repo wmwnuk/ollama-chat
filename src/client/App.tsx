@@ -1,5 +1,5 @@
 // src/client/chat.tsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 
 let context: Array<number>;
@@ -8,6 +8,7 @@ const App: React.FC = () => {
   const [input, setInput] = useState('');
   const [responses, setResponses] = useState<string[]>([]);
   const [inputDisabled, setInputDisabled] = useState(false);
+  const focusTargetRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSendMessage = async () => {
     try {
@@ -24,6 +25,11 @@ const App: React.FC = () => {
       console.error('Error sending message to Ollama:', error);
     } finally {
       setInputDisabled(false);
+      setTimeout(() => {
+        if (focusTargetRef.current) {
+          focusTargetRef.current.focus();
+        }
+      }, 1000)
     }
   };
 
@@ -36,37 +42,43 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white font-sans relative">
-      <div className="w-full p-6 bg-gray-800 rounded-lg shadow-lg flex-grow overflow-y-auto">
-        <div>
-          <ul className="list-none">
-            {responses.map((response, index) => (
-              <li className="border-t border-slate-700 p-5" key={index}>{response}</li>
-            ))}
-          </ul>
-        </div>
-        <div className="grid grid-cols-5 gap-2 fixed bottom-0 w-full">
-          <div className="mt-4 col-span-4">
-            <textarea
-              rows={4}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyPress}
-              className="w-full p-2 bg-gray-700 text-white rounded resize-none"
-              placeholder="Type your message here..."
-              disabled={inputDisabled}
-            />
-          </div>
-          <div className="mt-3 col-span-1">
-            <button
-              onClick={handleSendMessage}
-              className="p-2 bg-blue-500 rounded w-full h-full ${inputDisabled ? 'cursor-not-allowed opacity-50' : ''}`}"
-              disabled={inputDisabled}
-            >
-              Send
-            </button>
-          </div>
+    <div className="absolute inset-4 mx-4 my-4 bg-gray-900 rounded-lg shadow-lg overflow-hidden h-11/12">
+      <div className="bg-gray-700 py-2 px-4">
+        <h1 className="text-lg font-semibold">Ollama Chat</h1>
       </div>
+
+    <div className="px-4 py-2 overflow-y-scroll h-full bg-gray-800" id="chat-messages">
+    {responses.map((response, index) => (
+      <div className="mb-4" key={index}>
+        <div className="flex items-start">
+          <div className="ml-3">
+            <div className="bg-gray-700 text-white rounded-lg p-2">
+              <p className="leading-5">{response}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+   </div>
+
+      <div className="bg-gray-700 px-4 py-2 flex items-center absolute bottom-0 w-full">
+        <textarea
+          ref={focusTargetRef}
+          rows={2}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyPress}
+          placeholder="Type a message..."
+          className="flex-1 py-2 px-3 rounded-lg border-none focus:outline-none focus:ring focus:border-blue-300 bg-gray-800 text-white"
+          disabled={inputDisabled}
+          style={{opacity: inputDisabled ? 0.5 : 1, cursor: inputDisabled ? 'not-allowed' : 'auto'}}
+        ></textarea>
+        <button
+          onClick={handleSendMessage}
+          className="ml-2 bg-blue-500 text-white py-2 px-4 rounded-full"
+          disabled={inputDisabled}
+          style={{opacity: inputDisabled ? 0.5 : 1, cursor: inputDisabled ? 'not-allowed' : 'auto'}}
+        >Send</button>
       </div>
     </div>
   );

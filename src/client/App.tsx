@@ -1,5 +1,6 @@
 // src/client/chat.tsx
 import React, { useState, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 
 let context: Array<number>;
@@ -42,26 +43,36 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="absolute inset-4 mx-4 my-4 bg-gray-900 rounded-lg shadow-lg overflow-hidden h-11/12">
-      <div className="bg-gray-700 py-2 px-4">
-        <h1 className="text-lg font-semibold">Ollama Chat</h1>
+    <div className="bg-gray-900 w-screen h-screen flex flex-col">
+      <div className="bg-gray-700 flex justify-center p-4">
+        <h1 className="text-white text-lg font-semibold">Ollama Chat</h1>
       </div>
 
-    <div className="px-4 py-2 overflow-y-scroll h-full bg-gray-800" id="chat-messages">
+    <div className="w-full max-w-screen-lg flex-1 m-auto p-8 my-4 pb-20" id="chat-messages">
+    <div className="flex flex-col">
     {responses.map((response, index) => (
       <div className="mb-4" key={index}>
         <div className="flex items-start">
-          <div className="ml-3">
-            <div className="bg-gray-700 text-white rounded-lg p-2">
-              <p className="leading-5">{response}</p>
+          <div className="ml-3 mb-3">
+            <div
+              className="bg-gray-700 text-white rounded-lg p-2 break-words"
+              style={{backgroundColor: index%2 === 0 ? 'black' : ''}}
+            >
+              <span className="leading-5">
+                <ReactMarkdown>
+                  {response}
+                </ReactMarkdown>
+              </span>
             </div>
           </div>
         </div>
       </div>
     ))}
-   </div>
+    </div>
+    </div>
 
-      <div className="bg-gray-700 px-4 py-2 flex items-center absolute bottom-0 w-full">
+      <div className="fixed inset-x-0 bottom-0 bg-gray-700">
+        <div className="max-w-screen-lg m-auto w-full p-4 flex space-x-4 justify-center items-center">
         <textarea
           ref={focusTargetRef}
           rows={2}
@@ -69,7 +80,7 @@ const App: React.FC = () => {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyPress}
           placeholder="Type a message..."
-          className="flex-1 py-2 px-3 rounded-lg border-none focus:outline-none focus:ring focus:border-blue-300 bg-gray-800 text-white"
+          className="flex-1 py-2 px-3 rounded-lg border-none focus:outline-none focus:ring focus:border-blue-300 bg-gray-800 text-white resize-none"
           disabled={inputDisabled}
           style={{opacity: inputDisabled ? 0.5 : 1, cursor: inputDisabled ? 'not-allowed' : 'auto'}}
         ></textarea>
@@ -79,6 +90,7 @@ const App: React.FC = () => {
           disabled={inputDisabled}
           style={{opacity: inputDisabled ? 0.5 : 1, cursor: inputDisabled ? 'not-allowed' : 'auto'}}
         >Send</button>
+        </div>
       </div>
     </div>
   );

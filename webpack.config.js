@@ -36,5 +36,10 @@ module.exports = {
     port: 8080,
     open: true,
   },
+  performance: {
+    maxAssetSize: 1000000,
+    maxEntrypointSize: 1000000,
+    hints: 'warning',
+  },
 };
 

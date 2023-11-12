@@ -1,5 +1,5 @@
 // src/client/chat.tsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import axios from 'axios';
 
@@ -10,6 +10,9 @@ const App: React.FC = () => {
   const [responses, setResponses] = useState<string[]>([]);
   const [inputDisabled, setInputDisabled] = useState(false);
   const focusTargetRef = useRef<HTMLTextAreaElement>(null);
+  const responsesContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {scrollToBottom();}, [responses]);
 
   const handleSendMessage = async () => {
     try {
@@ -40,6 +43,13 @@ const App: React.FC = () => {
       event.preventDefault(); // Prevent new line in textarea
       handleSendMessage();
     }
+  };
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth', // You can use 'auto' for an instant scroll
+    });
   };
 
   return (

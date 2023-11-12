@@ -1,6 +1,7 @@
 // webpack.config.js
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   entry: './src/client/index.tsx',
@@ -39,7 +40,7 @@ module.exports = {
   performance: {
     maxAssetSize: 1000000,
     maxEntrypointSize: 1000000,
-    hints: 'warning',
+    hints: isProduction ? 'warning' : false,
   },
 };
 

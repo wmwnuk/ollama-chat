@@ -30,6 +30,8 @@
         "postcss": "^8.4.31",
         "postcss-loader": "^7.3.3",
         "postcss-preset-env": "^9.3.0",
+        "prettier": "^3.1.0",
+        "prettier-plugin-tailwindcss": "^0.5.7",
         "style-loader": "^3.3.3",
         "ts-loader": "^9.5.0",
         "typescript": "^5.2.2",
